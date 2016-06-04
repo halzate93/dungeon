@@ -1,8 +1,13 @@
 ﻿using UnityEngine;
 using System;
+using Zenject;
+using Communication;
 
 public class EnemyFetcher : MonoBehaviour
 {
+    [Inject]
+    private ICommunicationManager communications;
+
     private static EnemyFetcher instance;
 
     [SerializeField]
