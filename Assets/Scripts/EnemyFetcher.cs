@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 using Zenject;
 using Communication;
 
@@ -10,9 +11,6 @@ public class EnemyFetcher : MonoBehaviour
 
     private static EnemyFetcher instance;
 
-    [SerializeField]
-    private CharacterData[] enemies;
-
     public static EnemyFetcher Instance
     {
         get
@@ -21,9 +19,9 @@ public class EnemyFetcher : MonoBehaviour
         }
     }
 
-    public void FetchEnemies(Action<CharacterData[]> onGotEnemies)
+	public void FetchLevel(string levelId, Action<LevelData> onGotEnemies)
     {
-        onGotEnemies(enemies);
+		communications.Fetch ("levels/" + levelId, onGotEnemies);
     }
 
     private void Awake()

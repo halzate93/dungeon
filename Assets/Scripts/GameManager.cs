@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +10,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private Character[] monsterPrefabs;
+
+	[SerializeField]
+	private string levelId;
 
     public static GameManager Instance
     {
@@ -29,12 +34,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        EnemyFetcher.Instance.FetchEnemies(SetEnemyTeam);
+        EnemyFetcher.Instance.FetchLevel(levelId, SetEnemyTeam);
     }
 
-    private void SetEnemyTeam(CharacterData[] enemies)
+	private void SetEnemyTeam(LevelData level)
     {
-        for (int i = 0; i < enemies.Length; i++)
+		List<CharacterData> enemies = level.monsters;
+		for (int i = 0; i < enemies.Count; i++)
         {
             Character enemyPrefab = GetEnemyPrefab(enemies[i].monsterType);
             Character instance = Instantiate(enemyPrefab);
@@ -43,9 +49,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private Character GetEnemyPrefab(EnemyType enemyType)
+    private Character GetEnemyPrefab(string enemyType)
     {
-        return monsterPrefabs[(int)enemyType];
+		EnemyType enemyEnum = (EnemyType)Enum.Parse (typeof(EnemyType), enemyType);
+		return monsterPrefabs[(int)enemyEnum];
     }
 
     public void AttackEnemy(int slot, int attackPoints)
